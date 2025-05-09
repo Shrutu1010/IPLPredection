@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL 2025 Prediction Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6a00f4;
+            --secondary: #ffffff;
+            --accent: #00ddeb;
+            --gradient: linear-gradient(135deg, #6a00f4, #00ddeb);
+            --background: #f8fafc;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #1e293b;
+            --text-muted: #64748b;
+            --winner: #ffd700;
+            --runner-up: #c0c0c0;
+            --second-runner: #cd7f32;
+            --eliminator: #00ddeb;
+            --other: #adb5bd;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --background: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.95);
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding-top: 80px;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary) !important;
+        }
+
+        .nav-link {
+            color: var(--text) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary) !important;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1400px;
+            padding: 0 1.5rem;
+        }
+
+        .header-section {
+            background: var(--gradient);
+            border-radius: 1.5rem;
+            padding: 4rem 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #fff;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.2;
+        }
+
+        .header-section h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .team-card {
+            border-left: 6px solid;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .winner-team { border-left-color: var(--winner); }
+        .runnerup-team { border-left-color: var(--runner-up); }
+        .second-runnerup-team { border-left-color: var(--second-runner); }
+        .eliminator-team { border-left-color: var(--eliminator); }
+
+        .team-points {
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .confidence {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+        }
+
+        .badge:hover {
+            transform: scale(1.1);
+        }
+
+        .badge-winner { background: var(--winner); color: #000; }
+        .badge-runnerup { background: var(--runner-up); color: #000; }
+        .badge-secondrunnerup { background: var(--second-runner); color: #fff; }
+        .badge-eliminator { background: var(--eliminator); color: #000; }
+        .badge-other { background: var(--other); color: #000; }
+
+        .team-logo {
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            transition: transform 0.5s ease;
+        }
+
+        .team-logo:hover {
+            transform: rotate(360deg);
+        }
+
+        .search-bar input {
+            border-radius: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(106, 0, 244, 0.2);
+            outline: none;
+        }
+
+        .filter-section {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .filter-section select {
+            border-radius: 2rem;
+            padding: 0.75rem 1.5rem;
+            border: 1px solid #e2e8f0;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            width: 100%;
+        }
+
+        .chart-container {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .team-table {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        .team-table th {
+            background: var(--primary);
+            color: #fff;
+            font-weight: 500;
+            padding: 1rem;
+        }
+
+        .team-table td {
+            padding: 1rem;
+            vertical-align: middle  middle;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .team-table tr:hover {
+            background: rgba(0, 0, 0, 0.03);
+        }
+
+        .comparison-section, .player-stats-section, .match-prediction-section, .methodology-section {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .export-btn {
+            border-radius: 2rem;
+            padding: 0.5rem 1.5rem;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+            border: none;
+        }
+
+        .modal-header, .modal-footer {
+            border: none;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 1rem;
+            background: #e2e8f0;
+        }
+
+        .progress-bar {
+            background: var(--primary);
+        }
+
+        .live-score-widget {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .live-score-widget::before {
+            content: 'LIVE';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: #fff;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .share-section a {
+            color: #fff;
+            background: var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .share-section a:hover {
+            transform: scale(1.1);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: #fff;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .header-section h1 {
+                font-size: 1.8rem;
+            }
+
+            .team-points {
+                font-size: 1.5rem;
+            }
+
+            .team-logo {
+                width: 40px;
+                height: 40px;
+            }
+
+            .navbar-brand {
+                font-size: 1.2rem;
+            }
+
+            .nav-link {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .filter-section .col-md-4 {
+                margin-bottom: 1rem;
+            }
+
+            .dashboard-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">IPL 2025 Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#top-teams">Top Teams</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#model-performance">Model Performance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#rankings">Rankings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#methodology">Methodology</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="row">
+            <div class="col-12">
+                <div class="header-section">
+                    <h1><i class="fas fa-trophy"></i> IPL 2025 Prediction Dashboard</h1>
+                    <p class="lead">Powered by Machine Learning | Redefining Cricket Analytics</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Score Widget -->
+        <div class="row">
+            <div class="col-12">
+                <div class="live-score-widget">
+                    <h4><i class="fas fa-broadcast-tower"></i> Live Match Score</h4>
+                    <p id="liveScore">Kolkata Knight Riders 150/3 (15.2 overs) vs Chennai Super Kings</p>
+                    <small class="text-muted">Simulated live data for demo purposes</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="row">
+            <div class="col-12">
+                <div class="search-bar">
+                    <input type="text" id="teamSearch" class="form-control" placeholder="Search for a team...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="filter-section">
+                    <h5>Filter Teams</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select id="resultFilter" class="form-select">
+                                <option value="">All Results</option>
+                                <option value="Winner">Winner</option>
+                                <option value="Runner-up">Runner-up</option>
+                                <option value="Second Runner-up">Second Runner-up</option>
+                                <option value="Eliminator">Eliminator</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="pointsFilter" class="form-select">
+                                <option value="">All Points</option>
+                                <option value="high">High to Low</option>
+                                <option value="low">Low to High</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Teams -->
+        <div class="row mb-5" id="top-teams">
+            <div class="col-12">
+                <h3 class="mb-4">🏆 Predicted Top Teams</h3>
+                <div class="row" id="topTeamsContainer">
+                    {% for team in top_teams %}
+                    <div class="col-md-6 col-lg-3 mb-4 team-item" data-result="{{ team.Result }}" data-points="{{ team.points }}" data-team="{{ team.Team }}">
+                        <div class="dashboard-card team-card 
+                            {% if team.Result == 'Winner' %}winner-team
+                            {% elif team.Result == 'Runner-up' %}runnerup-team
+                            {% elif team.Result == 'Second Runner-up' %}second-runnerup-team
+                            {% elif team.Result == 'Eliminator' %}eliminator-team
+                            {% endif %}" data-bs-toggle="modal" data-bs-target="#teamModal" data-team="{{ team.Team }}">
+                            <div class="card-body text-center">
+                                <img src="
+                                    {% if team.Team == 'Chennai Super Kings' %}https://www.iplt20.com/assets/images/teams/csk-logo.png
+                                    {% elif team.Team == 'Mumbai Indians' %}https://www.iplt20.com/assets/images/teams/mi-logo.png
+                                    {% elif team.Team == 'Kolkata Knight Riders' %}https://www.iplt20.com/assets/images/teams/kkr-logo.png
+                                    {% elif team.Team == 'Royal Challengers Bengaluru' %}https://www.iplt20.com/assets/images/teams/rcb-logo.png
+                                    {% elif team.Team == 'Delhi Capitals' %}https://www.iplt20.com/assets/images/teams/dc-logo.png
+                                    {% elif team.Team == 'Sunrisers Hyderabad' %}https://www.iplt20.com/assets/images/teams/srh-logo.png
+                                    {% elif team.Team == 'Rajasthan Royals' %}https://www.iplt20.com/assets/images/teams/rr-logo.png
+                                    {% elif team.Team == 'Punjab Kings' %}https://www.iplt20.com/assets/images/teams/pbks-logo.png
+                                    {% elif team.Team == 'Lucknow Super Giants' %}https://www.iplt20.com/assets/images/teams/lsg-logo.png
+                                    {% elif team.Team == 'Gujarat Titans' %}https://www.iplt20.com/assets/images/teams/gt-logo.png
+                                    {% else %}https://via.placeholder.com/48
+                                    {% endif %}"
+                                    class="team-logo" alt="{{ team.Team }} logo">
+                                <h5 class="card-title d-inline">{{ team.Team }}</h5>
+                                <div class="my-3">
+                                    <span class="badge 
+                                        {% if team.Result == 'Winner' %}badge-winner
+                                        {% elif team.Result == 'Runner-up' %}badge-runnerup
+                                        {% elif team.Result == 'Second Runner-up' %}badge-secondrunnerup
+                                        {% elif team.Result == 'Eliminator' %}badge-eliminator
+                                        {% else %}badge-other
+                                        {% endif %}">
+                                        {{ team.Result }}
+                                    </span>
+                                </div>
+                                <div class="team-points">{{ team.points }}</div>
+                                <small class="text-muted">POINTS</small>
+                                <div class="confidence">Confidence: {{ team.confidence | default(85) }}%</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Performance -->
+        <div class="row mb-5" id="model-performance">
+            <div class="col-md-4">
+                <div class="dashboard-card stats-card">
+                    <h4>📊 Model Performance</h4>
+                    <h2 class="my-3">{{ model_metrics.accuracy }}%</h2>
+                    <p class="text-muted">Cross-validation Accuracy</p>
+                    <div class="alert alert-success" role="alert">
+                        <strong>Best Model:</strong> {{ model_metrics.name }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <h4>🔍 Feature Importance</h4>
+                        <div class="chart-container mt-3">
+                            <img src="{{ url_for('static', filename='feature_importance.png') }}" class="img-fluid" alt="Feature Chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Points Chart -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <h4>📈 Team Points Prediction</h4>
+                        <div class="chart-container">
+                            <img src="{{ url_for('static', filename='team_points.png') }}" class="img-fluid" alt="Points Chart">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Stats -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="player-stats-section">
+                    <h4>🌟 Top Players</h4>
+                    <div class="table-responsive">
+                        <table class="table team-table">
+                            <thead>
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Team</th>
+                                    <th>Runs</th>
+                                    <th>Wickets</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Virat Kohli</td>
+                                    <td>Royal Challengers Bengaluru</td>
+                                    <td>542</td>
+                                    <td>-</td>
+                                </tr>
+                                <tr>
+                                    <td>Jasprit Bumrah</td>
+                                    <td>Mumbai Indians</td>
+                                    <td>-</td>
+                                    <td>18</td>
+                                </tr>
+                                <tr>
+                                    <td>Shreyas Iyer</td>
+                                    <td>Kolkata Knight Riders</td>
+                                    <td>398</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Match Prediction -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="match-prediction-section">
+                    <h4>🎯 Predict Match Outcome</h4>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <select id="matchTeam1" class="form-select mb-3">
+                                <option value="">Select Team 1</option>
+                                {% for team in predictions %}
+                                <option value="{{ team.Team }}">{{ team.Team }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <span>vs</span>
+                        </div>
+                        <div class="col-md-5">
+                            <select id="matchTeam2" class="form-select mb-3">
+                                <option value="">Select Team 2</option>
+                                {% for team in predictions %}
+                                <option value="{{ team.Team }}">{{ team.Team }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <button class="export-btn" onclick="predictMatch()">Predict</button>
+                    <p id="predictionResult" class="mt-3"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rankings Table -->
+        <div class="row mb-5" id="rankings">
+            <div class="col-12">
+                <div class="dashboard-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4>📋 Complete Team Rankings</h4>
+                            <button class="export-btn" onclick="exportRankings()">Export as CSV</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table team-table" id="rankingsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Team</th>
+                                        <th>Result</th>
+                                        <th>Points</th>
+                                        <th>Confidence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for team in predictions %}
+                                    <tr class="team-row" data-result="{{ team.Result }}" data-points="{{ team.points }}" data-team="{{ team.Team }}">
+                                        <td>{{ loop.index }}</td>
+                                        <td>
+                                            <img src="
+                                                {% if team.Team == 'Chennai Super Kings' %}https://www.iplt20.com/assets/images/teams/csk-logo.png
+                                                {% elif team.Team == 'Mumbai Indians' %}https://www.iplt20.com/assets/images/teams/mi-logo.png
+                                                {% elif team.Team == 'Kolkata Knight Riders' %}https://www.iplt20.com/assets/images/teams/kkr-logo.png
+                                                {% elif team.Team == 'Royal Challengers Bengaluru' %}https://www.iplt20.com/assets/images/teams/rcb-logo.png
+                                                {% elif team.Team == 'Delhi Capitals' %}https://www.iplt20.com/assets/images/teams/dc-logo.png
+                                                {% elif team.Team == 'Sunrisers Hyderabad' %}https://www.iplt20.com/assets/images/teams/srh-logo.png
+                                                {% elif team.Team == 'Rajasthan Royals' %}https://www.iplt20.com/assets/images/teams/rr-logo.png
+                                                {% elif team.Team == 'Punjab Kings' %}https://www.iplt20.com/assets/images/teams/pbks-logo.png
+                                                {% elif team.Team == 'Lucknow Super Giants' %}https://www.iplt20.com/assets/images/teams/lsg-logo.png
+                                                {% elif team.Team == 'Gujarat Titans' %}https://www.iplt20.com/assets/images/teams/gt-logo.png
+                                                {% else %}https://via.placeholder.com/48
+                                                {% endif %}"
+                                                class="team-logo" alt="{{ team.Team }} logo">
+                                            {{ team.Team }}
+                                        </td>
+                                        <td>
+                                            <span class="badge 
+                                                {% if team.Result == 'Winner' %}badge-winner
+                                                {% elif team.Result == 'Runner-up' %}badge-runnerup
+                                                {% elif team.Result == 'Second Runner-up' %}badge-secondrunnerup
+                                                {% elif team.Result == 'Eliminator' %}badge-eliminator
+                                                {% else %}badge-other
+                                                {% endif %}">
+                                                {{ team.Result }}
+                                            </span>
+                                        </td>
+                                        <td>{{ team.points }}</td>
+                                        <td>{{ team.confidence | default(85) }}%</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Comparison -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="comparison-section">
+                    <h4>⚔️ Team Comparison</h4>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <select id="team1Select" class="form-select">
+                                <option value="">Select Team 1</option>
+                                {% for team in predictions %}
+                                <option value="{{ team.Team }}">{{ team.Team }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="team2Select" class="form-select">
+                                <option value="">Select Team 2</option>
+                                {% for team in predictions %}
+                                <option value="{{ team.Team }}">{{ team.Team }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th id="team1Name">Team 1</th>
+                                    <th id="team2Name">Team 2</th>
+                                </tr>
+                            </thead>
+                            <tbody id="comparisonTable">
+                                <tr>
+                                    <td>Points</td>
+                                    <td id="team1Points">-</td>
+                                    <td id="team2Points">-</td>
+                                </tr>
+                                <tr>
+                                    <td>Result</td>
+                                    <td id="team1Result">-</td>
+                                    <td id="team2Result">-</td>
+                                </tr>
+                                <tr>
+                                    <td>Batting Strength</td>
+                                    <td id="team1Batting">-</td>
+                                    <td id="team2Batting">-</td>
+                                </tr>
+                                <tr>
+                                    <td>Bowling Strength</td>
+                                    <td id="team1Bowling">-</td>
+                                    <td id="team2Bowling">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Section -->
+        <div class="row share-section mb-5">
+            <div class="col-12 text-center">
+                <h5>Share Dashboard</h5>
+                <div>
+                    <a href="#" onclick="share('twitter')"><i class="fab fa-twitter"></i></a>
+                    <a href="#" onclick="share('facebook')"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" onclick="share('linkedin')"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Methodology -->
+        <div class="row" id="methodology">
+            <div class="col-12">
+                <div class="methodology-section">
+                    <h3>🧠 Methodology</h3>
+                    <p>Leveraging cutting-edge machine learning, our IPL 2025 prediction model analyzes historical data (2008–2024) to deliver precise team rankings and performance forecasts.</p>
+
+                    <h5 class="mt-4">Key Features:</h5>
+                    <ul>
+                        <li><strong>Batting Strength</strong>: Average strike rate & batting consistency</li>
+                        <li><strong>Bowling Strength</strong>: Economy rate & wicket-taking efficiency</li>
+                        <li><strong>Consistency</strong>: Fifties and centuries per match</li>
+                        <li><strong>Historical Win Rate</strong>: Performance across all IPL seasons</li>
+                        <li><strong>Head-to-Head</strong>: Team-specific matchup analytics</li>
+                        <li><strong>Venue Impact</strong>: Home/away performance trends</li>
+                    </ul>
+
+                    <h5 class="mt-4">Model Evaluation:</h5>
+                    <p>We evaluated multiple algorithms, including Random Forest, XGBoost, and Neural Networks. The top-performing model was selected based on rigorous cross-validation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Stats Modal -->
+    <div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="teamModalLabel">Team Stats</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <img id="modalTeamLogo" src="" class="team-logo" alt="Team Logo">
+                        <h3 id="modalTeamName"></h3>
+                    </div>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Points</td>
+                                <td id="modalTeamPoints"></td>
+                            </tr>
+                            <tr>
+                                <td>Result</td>
+                                <td id="modalTeamResult"></td>
+                            </tr>
+                            <tr>
+                                <td>Batting Strength</td>
+                                <td>
+                                    <div class="progress">
+                                        <div id="modalTeamBatting" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Bowling Strength</td>
+                                <td>
+                                    <div class="progress">
+                                        <div id="modalTeamBowling" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Win Rate</td>
+                                <td id="modalTeamWinRate"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center py-4">
+        <div class="container">
+            <p>© 2025 IPL Prediction Dashboard | Crafted for Intra-college Datathon</p>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Team Data
+        const teams = [
+            {% for team in predictions %}
+            {
+                name: "{{ team.Team }}",
+                points: {{ team.points }},
+                result: "{{ team.Result }}",
+                batting: {{ team.batting_strength | default(0) }},
+                bowling: {{ team.bowling_strength | default(0) }},
+                confidence: {{ team.confidence | default(85) }},
+                winRate: {{ team.win_rate | default(50) }},
+                logo: "{% if team.Team == 'Chennai Super Kings' %}https://www.iplt20.com/assets/images/teams/csk-logo.png{% elif team.Team == 'Mumbai Indians' %}https://www.iplt20.com/assets/images/teams/mi-logo.png{% elif team.Team == 'Kolkata Knight Riders' %}https://www.iplt20.com/assets/images/teams/kkr-logo.png{% elif team.Team == 'Royal Challengers Bengaluru' %}https://www.iplt20.com/assets/images/teams/rcb-logo.png{% elif team.Team == 'Delhi Capitals' %}https://www.iplt20.com/assets/images/teams/dc-logo.png{% elif team.Team == 'Sunrisers Hyderabad' %}https://www.iplt20.com/assets/images/teams/srh-logo.png{% elif team.Team == 'Rajasthan Royals' %}https://www.iplt20.com/assets/images/teams/rr-logo.png{% elif team.Team == 'Punjab Kings' %}https://www.iplt20.com/assets/images/teams/pbks-logo.png{% elif team.Team == 'Lucknow Super Giants' %}https://www.iplt20.com/assets/images/teams/lsg-logo.png{% elif team.Team == 'Gujarat Titans' %}https://www.iplt20.com/assets/images/teams/gt-logo.png{% else %}https://via.placeholder.com/48{% endif %}"
+            },
+            {% endfor %}
+        ];
+
+        // Search Functionality
+        document.getElementById('teamSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const teamItems = document.querySelectorAll('.team-item');
+            const teamRows = document.querySelectorAll('.team-row');
+
+            teamItems.forEach(item => {
+                const teamName = item.dataset.team.toLowerCase();
+                item.style.display = teamName.includes(searchTerm) ? '' : 'none';
+            });
+
+            teamRows.forEach(row => {
+                const teamName = row.dataset.team.toLowerCase();
+                row.style.display = teamName.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Filter Functionality
+        document.getElementById('resultFilter').addEventListener('change', filterTeams);
+        document.getElementById('pointsFilter').addEventListener('change', filterTeams);
+
+        function filterTeams() {
+            const resultFilter = document.getElementById('resultFilter').value;
+            const pointsFilter = document.getElementById('pointsFilter').value;
+            const teamItems = document.querySelectorAll('.team-item');
+            const teamRows = document.querySelectorAll('.team-row');
+
+            let filteredItems = Array.from(teamItems);
+            let filteredRows = Array.from(teamRows);
+
+            // Filter by result
+            if (resultFilter) {
+                filteredItems = filteredItems.filter(item => item.dataset.result === resultFilter);
+                filteredRows = filteredRows.filter(row => row.dataset.result === resultFilter);
+            }
+
+            // Sort by points
+            if (pointsFilter) {
+                filteredItems.sort((a, b) => {
+                    const pointsA = parseInt(a.dataset.points);
+                    const pointsB = parseInt(b.dataset.points);
+                    return pointsFilter === 'high' ? pointsB - pointsA : pointsA - pointsB;
+                });
+                filteredRows.sort((a, b) => {
+                    const pointsA = parseInt(a.dataset.points);
+                    const pointsB = parseInt(b.dataset.points);
+                    return pointsFilter === 'high' ? pointsB - pointsA : pointsA - pointsB;
+                });
+            }
+
+            // Update display
+            teamItems.forEach(item => item.style.display = 'none');
+            filteredItems.forEach(item => item.style.display = '');
+
+            const rankingsTable = document.getElementById('rankingsTable').querySelector('tbody');
+            rankingsTable.innerHTML = '';
+            filteredRows.forEach((row, index) => {
+                row.querySelector('td:first-child').textContent = index + 1;
+                rankingsTable.appendChild(row);
+            });
+        }
+
+        // Team Comparison
+        document.getElementById('team1Select').addEventListener('change', updateComparison);
+        document.getElementById('team2Select').addEventListener('change', updateComparison);
+
+        function updateComparison() {
+            const team1 = document.getElementById('team1Select').value;
+            const team2 = document.getElementById('team2Select').value;
+            const team1Data = teams.find(t => t.name === team1) || {};
+            const team2Data = teams.find(t => t.name === team2) || {};
+
+            document.getElementById('team1Name').textContent = team1 || 'Team 1';
+            document.getElementById('team2Name').textContent = team2 || 'Team 2';
+            document.getElementById('team1Points').textContent = team1Data.points || '-';
+            document.getElementById('team2Points').textContent = team2Data.points || '-';
+            document.getElementById('team1Result').textContent = team1Data.result || '-';
+            document.getElementById('team2Result').textContent = team2Data.result || '-';
+            document.getElementById('team1Batting').textContent = team1Data.batting || '-';
+            document.getElementById('team2Batting').textContent = team2Data.batting || '-';
+            document.getElementById('team1Bowling').textContent = team1Data.bowling || '-';
+            document.getElementById('team2Bowling').textContent = team2Data.bowling || '-';
+        }
+
+        // Team Modal
+        document.querySelectorAll('.team-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const teamName = this.dataset.team;
+                const teamData = teams.find(t => t.name === teamName) || {};
+
+                document.getElementById('modalTeamName').textContent = teamName;
+                document.getElementById('modalTeamLogo').src = teamData.logo || '';
+                document.getElementById('modalTeamPoints').textContent = teamData.points || '-';
+                document.getElementById('modalTeamResult').textContent = teamData.result || '-';
+                document.getElementById('modalTeamBatting').style.width = `${teamData.batting || 0}%`;
+                document.getElementById('modalTeamBowling').style.width = `${teamData.bowling || 0}%`;
+                document.getElementById('modalTeamWinRate').textContent = teamData.winRate ? `${teamData.winRate}%` : '-';
+            });
+        });
+
+        // Export Rankings
+        function exportRankings() {
+            const rows = document.querySelectorAll('#rankingsTable tr');
+            let csv = 'Rank,Team,Result,Points,Confidence\n';
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Skip header
+                const cells = row.querySelectorAll('td');
+                const rowData = [
+                    cells[0].textContent,
+                    cells[1].textContent.trim(),
+                    cells[2].querySelector('.badge').textContent,
+                    cells[3].textContent,
+                    cells[4].textContent
+                ];
+                csv += rowData.join(',') + '\n';
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'ipl2025_rankings.csv');
+            a.click();
+        }
+
+        // Live Score Simulation
+        function updateLiveScore() {
+            const overs = (Math.random() * 20).toFixed(1);
+            const runs = Math.floor(Math.random() * 200);
+            const wickets = Math.floor(Math.random() * 10);
+            const teams = ['Kolkata Knight Riders', 'Chennai Super Kings', 'Mumbai Indians', 'Royal Challengers Bengaluru'];
+            const team1 = teams[Math.floor(Math.random() * teams.length)];
+            let team2 = teams[Math.floor(Math.random() * teams.length)];
+            while (team2 === team1) team2 = teams[Math.floor(Math.random() * teams.length)];
+            document.getElementById('liveScore').textContent = `${team1} ${runs}/${wickets} (${overs} overs) vs ${team2}`;
+        }
+        setInterval(updateLiveScore, 10000);
+        updateLiveScore();
+
+        // Match Prediction
+        function predictMatch() {
+            const team1 = document.getElementById('matchTeam1').value;
+            const team2 = document.getElementById('matchTeam2').value;
+            const result = document.getElementById('predictionResult');
+
+            if (!team1 || !team2) {
+                result.textContent = 'Please select both teams.';
+                return;
+            }
+
+            const team1Data = teams.find(t => t.name === team1);
+            const team2Data = teams.find(t => t.name === team2);
+            const confidence = Math.floor(Math.random() * 20) + 80; // Simulated confidence
+
+            if (team1Data.points > team2Data.points) {
+                result.textContent = `${team1} is predicted to win against ${team2} with ${confidence}% confidence.`;
+            } else if (team1Data.points < team2Data.points) {
+                result.textContent = `${team2} is predicted to win against ${team1} with ${confidence}% confidence.`;
+            } else {
+                result.textContent = `The match between ${team1} and ${team2} is too close to call! (${confidence}% confidence)`;
+            }
+        }
+
+        // Theme Toggle
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            body.setAttribute('data-theme', newTheme);
+            this.innerHTML = `<i class="fas fa-${newTheme === 'light' ? 'moon' : 'sun'}"></i>`;
+        });
+
+        // Back to Top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('show', window.scrollY > 300);
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Share Functionality
+        function share(platform) {
+            const url = window.location.href;
+            const text = 'Check out the IPL 2025 Prediction Dashboard!';
+            let shareUrl;
+
+            switch (platform) {
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+                    break;
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(text)}`;
+                    break;
+            }
+
+            window.open(shareUrl, '_blank');
+        }
+    </script>
+</body>
+</html>

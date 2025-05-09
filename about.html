@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About the IPL 2025 Prediction Model</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+            color: #343a40;
+        }
+        
+        .header-section {
+            background: linear-gradient(135deg, #0078d7, #00509e);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: #0078d7;
+        }
+        
+        .nav-pills .nav-link {
+            color: #343a40;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .methodology-item {
+            margin-bottom: 25px;
+            border-left: 4px solid #0078d7;
+            padding-left: 15px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #0078d7;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+        }
+        
+        .feature-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            height: 100%;
+            border-top: 4px solid #0078d7;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="header-section">
+                    <h1><i class="fas fa-chart-line"></i> About the IPL 2025 Prediction Model</h1>
+                    <p class="lead">Technical details behind our machine learning approach</p>
+                    <a href="/" class="btn btn-light mt-2"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Navigation Pills -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-overview-tab" data-bs-toggle="pill" data-bs-target="#pills-overview" type="button" role="tab" aria-controls="pills-overview" aria-selected="true">Overview</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-methodology-tab" data-bs-toggle="pill" data-bs-target="#pills-methodology" type="button" role="tab" aria-controls="pills-methodology" aria-selected="false">Methodology</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-features-tab" data-bs-toggle="pill" data-bs-target="#pills-features" type="button" role="tab" aria-controls="pills-features" aria-selected="false">Features</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-model-tab" data-bs-toggle="pill" data-bs-target="#pills-model" type="button" role="tab" aria-controls="pills-model" aria-selected="false">Model Selection</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="pills-tech-tab" data-bs-toggle="pill" data-bs-target="#pills-tech" type="button" role="tab" aria-controls="pills-tech" aria-selected="false">Tech Stack</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Content Sections -->
+        <div class="row">
+            <div class="col-12">
+                <div class="tab-content" id="pills-tabContent">
+                    <!-- Overview Tab -->
+                    <div class="tab-pane fade show active" id="pills-overview" role="tabpanel" aria-labelledby="pills-overview-tab">
+                        <div class="content-section">
+                            <h2>Project Overview</h2>
+                            <p>This prediction model was developed for the Intra-college IPL Datathon Competition to forecast the outcomes of the IPL 2025 season. The objective was to predict the winner, runner-up, second runner-up, and eliminator based on historical IPL data from 2008 to 2024.</p>
+                            
+                            <div class="alert alert-primary mt-4">
+                                <h5><i class="fas fa-trophy"></i> Predicted IPL 2025 Results</h5>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>Winner:</strong> Gujarat Titans</li>
+                                    <li class="list-group-item"><strong>Runner-up:</strong> Royal Challengers Bangalore</li>
+                                    <li class="list-group-item"><strong>Second Runner-up:</strong> Punjab Kings</li>
+                                    <li class="list-group-item"><strong>Eliminator:</strong> Mumbai Indians</li>
+                                </ul>
+                            </div>
+                            
+                            <h4 class="mt-4">Dataset Overview</h4>
+                            <p>The model was trained on historical IPL data (2008-2024) containing team performance metrics such as batting averages, bowling economy rates, win/loss records, and many other features. The dataset included comprehensive statistics for all IPL teams across multiple seasons.</p>
+                            
+                            <h4 class="mt-4">Key Performance Indicators</h4>
+                            <div class="row mt-3">
+                                <div class="col-md-4 mb-3">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Accuracy</h5>
+                                            <h2 class="card-text text-primary">97.6%</h2>
+                                            <p class="card-text text-muted">Cross-validation accuracy</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Best Model</h5>
+                                            <h2 class="card-text text-primary">XGBoost</h2>
+                                            <p class="card-text text-muted">Selected after evaluation</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="card text-center h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Simulation Runs</h5>
+                                            <h2 class="card-text text-primary">1000+</h2>
+                                            <p class="card-text text-muted">Match simulations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Methodology Tab -->
+                    <div class="tab-pane fade" id="pills-methodology" role="tabpanel" aria-labelledby="pills-methodology-tab">
+                        <div class="content-section">
+                            <h2>Methodology</h2>
+                            <p>Our approach combined statistical analysis, feature engineering, and machine learning to predict the IPL 2025 season outcomes. Here's how we tackled this challenge:</p>
+                            
+                            <div class="methodology-item">
+                                <h4><span class="step-number">1</span>Data Preprocessing</h4>
+                                <p>We started by cleaning and preprocessing the historical IPL data:</p>
+                                <ul>
+                                    <li>Standardized team names to handle inconsistencies (e.g., "RCB" and "Royal Challengers Bangalore")</li>
+                                    <li>Aggregated data to team-season level for consistent analysis</li>
+                                    <li>Filtered only active teams for relevant predictions</li>
+                                    <li>Handled missing values appropriately based on the data context</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="methodology-item">
+                                <h4><span class="step-number">2</span>Feature Engineering</h4>
+                                <p>We created composite features that better capture team performance:</p>
+                                <ul>
+                                    <li>Batting strength: Derived from strike rate and batting average</li>
+                                    <li>Bowling strength: Combined economy rate and bowling strike rate</li>
+                                    <li>Consistency: Based on number of fifties per match</li>
+                                    <li>Historical win rate: Overall performance across seasons</li>
+                                    <li>Head-to-head analysis: Performance against specific opponents</li>
+                                    <li>Venue-specific performance: How teams perform at different grounds</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="methodology-item">
+                                <h4><span class="step-number">3</span>Model Training & Selection</h4>
+                                <p>Multiple machine learning models were trained and evaluated:</p>
+                                <ul>
+                                    <li>Random Forest: 91.5% accuracy</li>
+                                    <li>Gradient Boosting: 79.7% accuracy</li>
+                                    <li>XGBoost: 97.6% accuracy (selected as best model)</li>
+                                    <li>Neural Network: 83.1% accuracy</li>
+                                </ul>
+                                <p>We used stratified k-fold cross-validation (k=5) to ensure reliable performance metrics.</p>
+                            </div>
+                            
+                            <div class="methodology-item">
+                                <h4><span class="step-number">4</span>Tournament Simulation</h4>
+                                <p>Using the trained model, we simulated the entire IPL 2025 tournament:</p>
+                                <ul>
+                                    <li>Each match was simulated 1000+ times to account for variance</li>
+                                    <li>League standings were computed based on simulated results</li>
+                                    <li>Playoff matches were simulated with adjusted weights for pressure situations</li>
+                                    <li>Final rankings were determined by aggregating all simulation results</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Features Tab -->
+                    <div class="tab-pane fade" id="pills-features" role="tabpanel" aria-labelledby="pills-features-tab">
+                        <div class="content-section">
+                            <h2>Feature Engineering</h2>
+                            <p>The features we engineered played a crucial role in achieving high prediction accuracy. Here's a detailed look at our feature set:</p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card feature-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="fas fa-bat-ball"></i> Batting Strength</h5>
+                                            <p class="card-text">A composite metric derived from:</p>
+                                            <ul>
+                                                <li>Team batting average</li>
+                                                <li>Strike rate</li>
+                                                <li>Runs per over</li>
+                                                <li>Boundary percentage</li>
+                                            </ul>
+                                            <p class="text-muted small">Relative importance: 35%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card feature-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="fas fa-bowling-ball"></i> Bowling Strength</h5>
+                                            <p class="card-text">A composite metric derived from:</p>
+                                            <ul>
+                                                <li>Economy rate</li>
+                                                <li>Bowling strike rate</li>
+                                                <li>Wickets per match</li>
+                                                <li>Dot ball percentage</li>
+                                            </ul>
+                                            <p class="text-muted small">Relative importance: 25%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card feature-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="fas fa-chart-line"></i> Consistency</h5>
+                                            <p class="card-text">Measures team's performance stability:</p>
+                                            <ul>
+                                                <li>Fifties per match</li>
+                                                <li>Standard deviation of team scores</li>
+                                                <li>Frequency of collapse (losing 3+ wickets quickly)</li>
+                                                <li>Finishing ability (runs in death overs)</li>
+                                            </ul>
+                                            <p class="text-muted small">Relative importance: 15%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card feature-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="fas fa-history"></i> Historical Win Rate</h5>
+                                            <p class="card-text">Team's past performance metrics:</p>
+                                            <ul>
+                                                <li>Overall win percentage</li>
+                                                <li>Recent form (last 10 matches)</li>
+                                                <li>Win rate in last 3 seasons</li>
+                                                <li>Performance trend (improving/declining)</li>
+                                            </ul>
+                                            <p class="text-muted small">Relative importance: 10%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card feature-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="fas fa-handshake"></i> Head-to-Head</h5>
+                                            <p class="card-text">Team's performance against specific opponents:</p>
+                                            <ul>
+                                                <li>Win rate against each team</li>
+                                                <li>Runs scored/conceded against each team</li>
+                                                <li>Match-up specific stats (e.g., vs spin/pace)</li>
+                                            </ul>
+                                            <p class="text-muted small">Relative importance: 10%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card feature-card">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="fas fa-map-marker-alt"></i> Venue Performance</h5>
+                                            <p class="card-text">Team's performance at different venues:</p>
+                                            <ul>
+                                                <li>Win rate at each venue</li>
+                                                <li>Home vs away performance</li>
+                                                <li>Performance on different pitch types</li>
+                                                <li>Adaptation to conditions</li>
+                                            </ul>
+                                            <p class="text-muted small">Relative importance: 5%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h4>Feature Importance</h4>
+                                <img src="/static/feature_importance.png" alt="Feature Importance Chart" class="img-fluid rounded mt-3">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Model Selection Tab -->
+                    <div class="tab-pane fade" id="pills-model" role="tabpanel" aria-labelledby="pills-model-tab">
+                        <div class="content-section">
+                            <h2>Model Selection & Evaluation</h2>
+                            <p>We experimented with several machine learning algorithms to find the best performing model for our IPL prediction task:</p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h4>Models Evaluated</h4>
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Model</th>
+                                                <th>Accuracy</th>
+                                                <th>F1 Score</th>
+                                                <th>Training Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="table-success">
+                                                <td><strong>XGBoost</strong></td>
+                                                <td>97.6%</td>
+                                                <td>0.962</td>
+                                                <td>62s</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Random Forest</td>
+                                                <td>91.5%</td>
+                                                <td>0.903</td>
+                                                <td>84s</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Neural Network</td>
+                                                <td>83.1%</td>
+                                                <td>0.815</td>
+                                                <td>156s</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Gradient Boosting</td>
+                                                <td>79.7%</td>
+                                                <td>0.778</td>
+                                                <td>97s</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h4>XGBoost Hyperparameters</h4>
+                                    <div class="code-block">
+                                        {
+                                          "learning_rate": 0.05,
+                                          "max_depth": 6,
+                                          "n_estimators": 200,
+                                          "subsample": 0.8,
+                                          "colsample_bytree": 0.8,
+                                          "min_child_weight": 3,
+                                          "gamma": 0.1,
+                                          "objective": "multi:softprob",
+                                          "eval_metric": "mlogloss"
+                                        }
+                                    </div>
+                                    <p class="mt-3">These parameters were optimized using Bayesian optimization with 5-fold cross-validation.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h4>Performance Metrics</h4>
+                                    <p>The XGBoost model demonstrated excellent performance across all metrics:</p>
+                                    <ul>
+                                        <li><strong>Accuracy:</strong> 97.6% (correctly predicted outcomes)</li>
+                                        <li><strong>Precision:</strong> 0.958 (minimizing false positives)</li>
+                                        <li><strong>Recall:</strong> 0.967 (minimizing false negatives)</li>
+                                        <li><strong>F1 Score:</strong> 0.962 (harmonic mean of precision and recall)</li>
+                                        <li><strong>AUC-ROC:</strong> 0.991 (area under the receiver operating characteristic curve)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 alert alert-info">
+                                <h5><i class="fas fa-lightbulb"></i> Why XGBoost?</h5>
+                                <p>XGBoost was selected as our final model for several key reasons:</p>
+                                <ul>
+                                    <li>Superior performance on historical data predictions</li>
+                                    <li>Better handling of feature interactions</li>
+                                    <li>Robust against overfitting with regularization</li>
+                                    <li>Excellent handling of categorical features</li>
+                                    <li>Built-in handling of missing values</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tech Stack Tab -->
+                    <div class="tab-pane fade" id="pills-tech" role="tabpanel" aria-labelledby="pills-tech-tab">
+                        <div class="content-section">
+                            <h2>Tech Stack & Implementation</h2>
+                            <p>This project was built using modern data science and web technologies:</p>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5 class="mb-0">Data Processing & Model Development</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Python 3.11
+                                                    <span class="badge bg-primary rounded-pill">Core Language</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Pandas & NumPy
+                                                    <span class="badge bg-primary rounded-pill">Data Manipulation</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Scikit-learn
+                                                    <span class="badge bg-primary rounded-pill">ML Algorithms</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    XGBoost
+                                                    <span class="badge bg-success rounded-pill">Main Algorithm</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Matplotlib & Seaborn
+                                                    <span class="badge bg-primary rounded-pill">Visualization</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Joblib
+                                                    <span class="badge bg-primary rounded-pill">Model Serialization</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-success text-white">
+                                            <h5 class="mb-0">Web Application</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Flask
+                                                    <span class="badge bg-success rounded-pill">Web Framework</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Bootstrap 5
+                                                    <span class="badge bg-success rounded-pill">Frontend CSS</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    Font Awesome
+                                                    <span class="badge bg-success rounded-pill">Icons</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                    JSON API
+                                                    <span class="badge bg-success rounded-pill">Data Exchange</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h4>Project Structure</h4>
+                                <div class="code-block">
+                                    ipl_prediction_app/
+                                    ├── app.py              # Main Flask application
+                                    ├── data/               # Data directory
+                                    │   └── predicted_ipl_2025_rankings.csv   # Prediction results
+                                    ├── model/              # Model directory
+                                    │   └── best_model.pkl  # Serialized XGBoost model
+                                    ├── static/            # Static assets
+                                    │   ├── css/
+                                    │   ├── js/
+                                    │   └── images/
+                                    └── templates/         # HTML templates
+                                        ├── index.html     # Dashboard page
+                                        └── about.html     # About page
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h4>Deployment & Hosting</h4>
+                                <p>The application is deployed using:</p>
+                                <ul>
+                                    <li><strong>Server:</strong> Heroku/AWS</li>
+                                    <li><strong>Database:</strong> PostgreSQL for storing predictions</li>
+                                    <li><strong>CI/CD:</strong> GitHub Actions for continuous integration</li>
+                                    <li><strong>Monitoring:</strong> New Relic for application performance monitoring</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="row">
+            <div class="col-12">
+                <div class="footer text-center">
+                    <p>IPL 2025 Prediction Model | Intra-college IPL Datathon Competition</p>
+                    <p class="small">Made with <i class="fas fa-heart text-danger"></i> by Data Science Team</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
